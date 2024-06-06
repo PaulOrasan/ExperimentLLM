@@ -9,5 +9,5 @@ def fetch_available_models() -> List[Model]:
     return AVAILABLE_MODELS
 
 
-def fetch_response_from_model(model: Model, chat_history: List[str], user_message: str) -> str:
-    return f"You said {user_message}!"
+def fetch_response_from_model(model: Model, chat_history: List[str], user_message: str, user_name: str) -> str:
+    return f"{user_name}, you said {user_message}!"

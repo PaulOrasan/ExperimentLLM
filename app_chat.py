@@ -11,8 +11,8 @@ def on_model_change(selected_model, history_by_model):
     return history_by_model[selected_model]
 
 
-def respond(message, chat_history, selected_model, history_by_model):
-    bot_message = fetch_response_from_model(models[0], chat_history, message)
+def respond(message, chat_history, selected_model, history_by_model, request: gr.Request):
+    bot_message = fetch_response_from_model(models[0], chat_history, message, request.username)
     chat_history.append((message, bot_message))
     history_by_model[selected_model] = chat_history
     time.sleep(2)
@@ -22,7 +22,7 @@ def respond(message, chat_history, selected_model, history_by_model):
 def create_tab():
     with gr.TabItem("Chat with AI", id=2) as tab:
         history_by_model = gr.State({model.model_name:[] for model in models})
-        selected_model = gr.Dropdown(choices=[model.model_name for model in models], value=models[0].model_name)
+        selected_model = gr.Dropdown(choices=[model.model_name for model in models], value=models[0].model_name, label="Model")
         chatbot = gr.Chatbot(min_width=500)
         msg = gr.Textbox()
         clear = gr.ClearButton([msg, chatbot])
