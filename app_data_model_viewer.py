@@ -38,7 +38,7 @@ def create_tab():
             with gr.Row():
                 dataset_dropdown = gr.Dropdown([d.dataset_name for d in datasets], type="index",
                                                label="Select dataset:")
-                split_dropdown = gr.Dropdown(["train", "test"], label="Select split:")
+                split_dropdown = gr.Dropdown(["train", "test"], label="Select split:", value="train")
 
             dataframe = gr.DataFrame(headers=["Question", "Answer"], label="View data:")
             question_box = gr.Textbox(label="Question:")

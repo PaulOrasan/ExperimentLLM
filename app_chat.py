@@ -2,14 +2,17 @@ import time
 
 import gradio as gr
 
-from loaders.model_loader import fetch_available_models
+from loaders.model_loader import fetch_available_models, fetch_response_from_model
+
+models = fetch_available_models()
+
 
 def on_model_change(selected_model, history_by_model):
     return history_by_model[selected_model]
 
 
 def respond(message, chat_history, selected_model, history_by_model):
-    bot_message = f"You said {message}"
+    bot_message = fetch_response_from_model(models[0], chat_history, message)
     chat_history.append((message, bot_message))
     history_by_model[selected_model] = chat_history
     time.sleep(2)
@@ -18,7 +21,6 @@ def respond(message, chat_history, selected_model, history_by_model):
 
 def create_tab():
     with gr.TabItem("Chat with AI", id=2) as tab:
-        models = fetch_available_models()
         history_by_model = gr.State({model.model_name:[] for model in models})
         selected_model = gr.Dropdown(choices=[model.model_name for model in models], value=models[0].model_name)
         chatbot = gr.Chatbot(min_width=500)
