@@ -1,7 +1,10 @@
 import gradio as gr
-import pandas as pd
+import matplotlib
+
 from loaders.evaluation_loader import fetch_available_evaluations, add_evaluation
-from loaders.experiment_loader import fetch_available_experiments, fetch_experiment_prediction
+from loaders.experiment_loader import fetch_experiment_prediction
+
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 evaluations = fetch_available_evaluations()
@@ -17,6 +20,7 @@ def on_question_change(index):
 def on_validate_click(question, *checkbox_inputs):
     for ev, ch in zip(evaluations, checkbox_inputs):
         add_evaluation(ev, question, ch)
+    return build_accuracy_plot(), build_annotation_plot()
 
 
 def build_accuracy_plot():
@@ -75,11 +79,12 @@ def create_tab():
                     chbox = gr.Checkbox(label="Accurate?", scale=1)
                     model_output_textboxes.append(box)
                     is_accurate_checkboxes.append(chbox)
-            gr.Button("Validate predictions!").click(on_validate_click, inputs=[question_box] + is_accurate_checkboxes)
+            validate_button = gr.Button("Validate predictions!")
             selected_question.change(on_question_change, inputs=[selected_question],
                                      outputs=[question_box] + model_output_textboxes + is_accurate_checkboxes)
 
             with gr.Row():
-                gr.Plot(build_accuracy_plot, every=10, scale=1)
-                gr.Plot(build_annotation_plot, every=10, scale=1)
+                accuracy_plot = gr.Plot(build_accuracy_plot, scale=1)
+                annotation_plot = gr.Plot(build_annotation_plot, scale=1)
+            validate_button.click(on_validate_click, inputs=[question_box] + is_accurate_checkboxes, outputs=[accuracy_plot, annotation_plot])
     return tab

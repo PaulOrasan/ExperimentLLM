@@ -1,3 +1,5 @@
+import time
+
 import gradio as gr
 
 from loaders.data_loader import fetch_available_datasets, fetch_dataset
@@ -7,8 +9,16 @@ datasets = fetch_available_datasets()
 experiments = fetch_available_experiments()
 
 
-def on_dataset_dropdown_change(event: gr.SelectData):
+def on_dataset_dropdown_change(event: gr.SelectData, progress=gr.Progress()):
     dataset = datasets[event.index]
+    progress(0, desc=f"Identifying dataset {dataset.dataset_name}...")
+    time.sleep(2)
+    progress(0.25, desc="Found dataset! Downloading...")
+    time.sleep(3)
+    progress(0.5, desc="Dataset fairly large, thank you for your patience!")
+    time.sleep(3)
+    progress(0.8, desc="Almost done!")
+    time.sleep(2)
     return fetch_dataset(dataset.dataset_name, dataset.splits[0])
 
 
