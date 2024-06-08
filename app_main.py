@@ -5,8 +5,13 @@ from app_experiment_viewer import create_tab as create_experiment_viewer_tab
 from app_chat import create_tab as create_chat_tab
 
 allowed_users = [("Paul", "parola"), ("Anca", "parola")]
+theme = gr.themes.Soft(
+    primary_hue="rose",
+    secondary_hue="fuchsia",
+)
+
 if __name__ == "__main__":
-    with gr.Blocks(gr.themes.Soft()) as demo:
+    with gr.Blocks(theme=theme) as demo:
         with gr.Row():
             gr.Markdown("# Experiment with LLMs!")
             logout_button = gr.Button("Logout", link="/logout")

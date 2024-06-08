@@ -25,7 +25,7 @@ def create_tab():
         selected_model = gr.Dropdown(choices=[model.model_name for model in models], value=models[0].model_name, label="Model")
         chatbot = gr.Chatbot(min_width=500)
         msg = gr.Textbox()
-        clear = gr.ClearButton([msg, chatbot])
+        gr.ClearButton([msg, chatbot])
 
         msg.submit(respond, [msg, chatbot, selected_model, history_by_model], [msg, chatbot, history_by_model])
         selected_model.change(on_model_change, inputs=[selected_model, history_by_model], outputs=[chatbot])
